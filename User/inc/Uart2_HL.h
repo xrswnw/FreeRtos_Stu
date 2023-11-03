@@ -3,12 +3,15 @@
 
 #include "Config.h"
 
-#define RS485_PORT		UART4
+#define RS485_PORT		UART3
+
+#define RS485_BAUD_RATE						115200
+
 
 
 extern const PORT_INF RS485_PORT_CTRL;
-#define R485_EnableRx()                     do{GPIO_BOP(RS485_PORT_CTRL.port) = RS485_PORT_CTRL.pin;}while(0)
-#define R485_EnableTx()                     do{GPIO_BC(RS485_PORT_CTRL.port) = RS485_PORT_CTRL.pin;}while(0)
+#define R485_EnableRx()                     do{GPIO_BC(RS485_PORT_CTRL.port) = RS485_PORT_CTRL.pin;}while(0)
+#define R485_EnableTx()                     do{GPIO_BOP(RS485_PORT_CTRL.port) = RS485_PORT_CTRL.pin;}while(0)
 
 
 

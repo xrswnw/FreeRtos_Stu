@@ -19,5 +19,5 @@
 
 
 
-
+void Uart_Init(uint32_t bud);
 #endif

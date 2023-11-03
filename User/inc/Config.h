@@ -31,6 +31,7 @@
     } PORT_INF;
 #elif defined (_ANYID_GD32_GDLIB)
 	#include "gd32f30x_libopt.h"
+	#include "gd32f30x.h"
 	typedef struct Port_Inf
 	{
 	    uint32_t port;

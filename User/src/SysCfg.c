@@ -22,15 +22,16 @@ void rcu_config(void)
     rcu_periph_clock_enable(RCU_GPIOC);
     rcu_periph_clock_enable(RCU_GPIOD);
     /* enable ADC0 clock */
-    rcu_periph_clock_enable(RCU_UART4);
+    rcu_periph_clock_enable(RCU_UART3);
     /* enable ADC1 clock */
     rcu_periph_clock_enable(RCU_ADC1);  
     /* enable DMA0 clock */
-    rcu_periph_clock_enable(RCU_DMA0);  
+    //rcu_periph_clock_enable(RCU_DMA0);  
     /* enable timer1 clock */
     rcu_periph_clock_enable(RCU_TIMER1);
     /* config ADC clock */
-    rcu_adc_clock_config(RCU_CKADC_CKAPB2_DIV4);
+	rcu_periph_clock_enable( RCU_AF);
+    //rcu_adc_clock_config(RCU_CKADC_CKAPB2_DIV4);
 }
 
 
@@ -56,28 +57,73 @@ void Sys_CfgNVIC(void)
 }
 */
 const PORT_INF SYS_RUN_LED = {GPIOB, GPIO_PIN_1};
+const PORT_INF IO_LED_CTL = {GPIOB, GPIO_PIN_3};
 
 void Sys_CtrlIOInit(void)
 {
 	gpio_init(SYS_RUN_LED.port, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, SYS_RUN_LED.pin);
+	gpio_init(IO_LED_CTL.port, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, IO_LED_CTL.pin);
+
 
 }
 void Sys_Init(void)
 {
 	rcu_config();
 	Sys_CtrlIOInit();
-	Uart2_HLInit(115200);
-}	
+	Uart_Init(RS485_BAUD_RATE);
+	rcu_clock_freq_get(CK_SYS);
+}
 
-void SysLedTask(void *pParaments)
+const TickType_t xDelay500ms = pdMS_TO_TICKS( 500UL );
+const TickType_t xDelay50ms = pdMS_TO_TICKS( 50UL );
+
+
+
+
+TaskHandle_t handSysLedTask1;
+void SysLedTask1(void *pParaments)
 {
+	static uint8_t i = 0;
+
+	UBaseType_t uxPriority;
+	
+	
 	while(1)
 	{
+		uxPriority = uxTaskPriorityGet( NULL );
 		Sys_LedOpen();
-		Sys_Delayms(1000);
-		Sys_LedOff();
-		Sys_Delayms(1000);
-		Uart_SendByte(0x55);
+		Uart_SendByte(i++);
+		if(i > (0xFF - 1))
+		{
+			vTaskDelete(NULL);
+		}
+		else if(i == 0xF0)
+		{
+			vTaskSuspend(NULL);
+		}
+		
+		if(i % 2 == 0)
+		{
+			Sys_RunLedOpen();
+		}
+		else
+		{
+			Sys_RunLedOff();
+		}
+		vTaskDelay(xDelay50ms);
 	}
 }
 
+void SysLedTask2(void *pParaments)
+{
+	TickType_t uxPriority;
+	
+	uxPriority = uxTaskPriorityGet( NULL );
+
+	for(;;)
+	{
+		Sys_LedOff();
+	}
+
+
+}

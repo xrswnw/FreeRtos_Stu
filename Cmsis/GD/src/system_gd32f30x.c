@@ -37,7 +37,7 @@
 /* system frequency define */
 #define __IRC8M           (IRC8M_VALUE)            /* internal 8 MHz RC oscillator frequency */
 #define __HXTAL           (HXTAL_VALUE)            /* high speed crystal oscillator frequency */
-#define __SYS_OSC_CLK     (__IRC8M)                /* main oscillator frequency */
+#define __SYS_OSC_CLK     (__HXTAL)                /* main oscillator frequency */
 
 /* select a system clock by uncommenting the following line */
 /* use IRC8M */
@@ -50,9 +50,9 @@
 /* use HXTAL(XD series CK_HXTAL = 8M, CL series CK_HXTAL = 25M) */
 //#define __SYSTEM_CLOCK_HXTAL                    (uint32_t)(__HXTAL)
 //#define __SYSTEM_CLOCK_48M_PLL_HXTAL            (uint32_t)(48000000)
-//#define __SYSTEM_CLOCK_72M_PLL_HXTAL            (uint32_t)(72000000)
+#define __SYSTEM_CLOCK_72M_PLL_HXTAL            (uint32_t)(72000000)
 //#define __SYSTEM_CLOCK_108M_PLL_HXTAL           (uint32_t)(108000000)
-#define __SYSTEM_CLOCK_120M_PLL_HXTAL           (uint32_t)(120000000)
+//#define __SYSTEM_CLOCK_120M_PLL_HXTAL           (uint32_t)(120000000)
 
 #define RCU_MODIFY(__delay)     do{                                     \
                                     volatile uint32_t i;                \
@@ -679,7 +679,7 @@ static void system_clock_72m_hxtal(void)
 
     /* CK_PLL = (CK_HXTAL/2) * 18 = 72 MHz */
     RCU_CFG0 &= ~(RCU_CFG0_PLLMF | RCU_CFG0_PLLMF_4 | RCU_CFG0_PLLMF_5);
-    RCU_CFG0 |= RCU_PLL_MUL18;
+    RCU_CFG0 |= RCU_PLL_MUL12;
 
 #elif defined(GD32F30X_CL)
     /* CK_PLL = (CK_PREDIV0) * 18 = 72 MHz */ 
