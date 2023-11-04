@@ -20,11 +20,49 @@ extern const PORT_INF IO_LED_CTL;
 #define Sys_RunLedOff()				do{GPIO_BC(IO_LED_CTL.port) = IO_LED_CTL.pin;}while(0)				//reset
 
 
+
+#define QUEUE_LENGTH  	20			//队列长度
+#define ITEM_SIZE  		128			//单个子元素长度
+
+typedef struct queneInfo{
+	uint8_t	num;
+	uint8_t	buffer[ITEM_SIZE];
+}QUENE_INFO;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+extern QueueHandle_t xQueue1;
 extern TaskHandle_t handSysLedTask1;
+extern TaskHandle_t handSysLedTask2;
+extern SemaphoreHandle_t binarySemaphore;
+
+extern TaskHandle_t sysQueneTaskHandel1;
+extern TaskHandle_t sysQueneTaskHandel2;
 
 void SysLedTask1(void *pParaments);
 void SysLedTask2(void *pParaments);
 void Sys_Init(void);
 void Sys_CtrlIOInit(void);
+void SysReadQueueTask(void *pParaments);
+void SysWriteQueueTask(void *pParaments);
+
 
 #endif

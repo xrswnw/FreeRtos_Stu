@@ -92,14 +92,15 @@ void SysLedTask1(void *pParaments)
 	{
 		uxPriority = uxTaskPriorityGet( NULL );
 		Sys_LedOpen();
-		Uart_SendByte(i++);
+		//Uart_SendByte(i++);
+		i++;
 		if(i > (0xFF - 1))
 		{
 			vTaskDelete(NULL);
 		}
 		else if(i == 0xF0)
 		{
-			vTaskSuspend(NULL);
+			//vTaskSuspend(NULL);
 		}
 		
 		if(i % 2 == 0)
@@ -110,20 +111,131 @@ void SysLedTask1(void *pParaments)
 		{
 			Sys_RunLedOff();
 		}
-		vTaskDelay(xDelay50ms);
+		//vTaskDelay(xDelay50ms);
+		vTaskPrioritySet(handSysLedTask2, (uxPriority + 1));
 	}
 }
+TaskHandle_t handSysLedTask2;
 
+	TickType_t xLastWakeTime;
 void SysLedTask2(void *pParaments)
 {
 	TickType_t uxPriority;
-	
+	static uint8_t i = 1;
 	uxPriority = uxTaskPriorityGet( NULL );
 
+
+	
+	
+	xLastWakeTime = xTaskGetTickCount();//获取当前时间
 	for(;;)
 	{
 		Sys_LedOff();
+		i++;
+		//Uart_SendByte(i+=2);
+		//vApplicationIdleHook();
+		if(i % 2 == 0)
+		{
+			Sys_RunLedOff();
+		}
+		else
+		{
+			Sys_RunLedOpen();
+		}
+		vTaskDelayUntil(&xLastWakeTime, xDelay50ms);					//xLastWakeTime延时完成后会更新到延时时间
+		//vTaskPrioritySet(handSysLedTask2, (uxTaskPriorityGet( handSysLedTask1 ) - 1));;
 	}
+}
+
+
+QueueHandle_t xQueue1;
+
+uint8_t i = 0;
+QUENE_INFO g_sTempQueneInfo = {0};
+
+
+TaskHandle_t sysQueneTaskHandel1 ;
+TaskHandle_t sysQueneTaskHandel2 ;
+
+
+void SysWriteQueueTask(void *pParments)
+{
+	xLastWakeTime = xTaskGetTickCount();//获取当前时间
+	while(1)
+	{
+		g_sTempQueneInfo.num = uxQueueMessagesWaiting(xQueue1);		//获取队列当前长度
+		uint8_t j = 0;		
+		for(uint8_t i = 0; i < ITEM_SIZE; i++)
+		{
+			g_sTempQueneInfo.buffer[i] = j++;
+		}
+		xQueueSendToBack(xQueue1, &g_sTempQueneInfo, xDelay50ms);
+		if(g_sTempQueneInfo.num < QUEUE_LENGTH)
+		{
+			Uart_SendBuf(&g_sTempQueneInfo.num, 1);
+			Uart_SendBuf(g_sTempQueneInfo.buffer, ITEM_SIZE);
+			vTaskSuspend(sysQueneTaskHandel2);
+			vTaskDelayUntil(&xLastWakeTime, xDelay500ms * 2);
+			
+		}
+		else
+		{
+			/*	典型，可做时序参考
+			vTaskResume(sysQueneTaskHandel2);	//释放 读队列函数
+			vTaskPrioritySet(sysQueneTaskHandel2, (uxTaskPriorityGet( sysQueneTaskHandel2 ) + 1));	//读队列函数优先级加高
+			vTaskSuspend(NULL);				//suspend当前函数，后续代码不执行
+			*/
+			vTaskResume(sysQueneTaskHandel2);	//释放 读队列函数
+			vTaskPrioritySet(sysQueneTaskHandel2, 1);	//读队列函数优先级加高
+			vTaskSuspend(NULL);
+			//vTaskSuspend(NULL);				//suspend当前函数，后续代码不执行
+		}
+	}
+}
+
+void SysReadQueueTask(void *pParments)
+{
+	UBaseType_t num = 0;
+	xLastWakeTime = xTaskGetTickCount();//获取当前时间
+	while(1)
+	{
+		num = uxQueueMessagesWaiting(xQueue1);
+		xQueueReceive(xQueue1, &g_sTempQueneInfo, xDelay50ms);
+		vTaskDelayUntil(&xLastWakeTime, xDelay500ms);
+		if(num > 0)
+		{
+			Uart_SendBuf((uint8_t *)num, 1);
+			vTaskSuspend(sysQueneTaskHandel1);
+			Uart_SendBuf(g_sTempQueneInfo.buffer, ITEM_SIZE);
+			vTaskDelayUntil(&xLastWakeTime, xDelay500ms * 2);
+		}
+		else
+		{
+			/*	典型，可做时序参考
+			vTaskResume(sysQueneTaskHandel1);
+			vTaskPrioritySet(sysQueneTaskHandel2, (uxTaskPriorityGet( sysQueneTaskHandel2 ) - 1));
+			vTaskSuspend(NULL);			//suspend当前函数，后续代码不执行
+			*/
+			
+			vTaskResume(sysQueneTaskHandel1);
+			vTaskSuspend(NULL);
+			//vTaskPrioritySet(sysQueneTaskHandel2, (uxTaskPriorityGet( sysQueneTaskHandel2 ) - 1));
+			//vTaskSuspend(NULL);			//suspend当前函数，后续代码不执行
+
+		}
+	}
+
+}
+
+
+/* 二进制信号量句柄 */
+SemaphoreHandle_t binarySemaphore;
+
+
+void SysSemaphoreTask(void *pParments)
+{
+	
+
 
 
 }

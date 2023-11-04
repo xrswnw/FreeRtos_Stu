@@ -32,6 +32,8 @@
 #elif defined (_ANYID_GD32_GDLIB)
 	#include "gd32f30x_libopt.h"
 	#include "gd32f30x.h"
+	#include "FreeRTOS.h"				//    #error "include FreeRTOS.h" must appear in source files before "include semphr.h"，问题，调用部分头文件前需先调用FreeRTOS.h
+	#include "semphr.h"
 	typedef struct Port_Inf
 	{
 	    uint32_t port;

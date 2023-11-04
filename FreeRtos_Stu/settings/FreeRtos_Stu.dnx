@@ -16,7 +16,7 @@
         <ShowSource>1</ShowSource>
     </Trace1>
     <DebugChecksum>
-        <Checksum>55176659</Checksum>
+        <Checksum>419788866</Checksum>
     </DebugChecksum>
     <Disassembly>
         <InstrCount>0</InstrCount>
@@ -74,6 +74,7 @@
     <struct_types>
         <Fmt0>PORT_INF-pin	4	0</Fmt0>
         <Fmt1>PORT_INF-port	4	0</Fmt1>
+        <Fmt2>QUENE_INFO-num	3	0</Fmt2>
     </struct_types>
     <Trace2>
         <Enabled>0</Enabled>

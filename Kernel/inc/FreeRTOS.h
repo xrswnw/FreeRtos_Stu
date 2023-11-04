@@ -886,7 +886,7 @@
 #endif
 
 #ifndef configUSE_TIME_SLICING
-    #define configUSE_TIME_SLICING    1
+    #define configUSE_TIME_SLICING    1								//同优先级轮流执行
 #endif
 
 #ifndef configINCLUDE_APPLICATION_DEFINED_PRIVILEGED_FUNCTIONS

@@ -56,7 +56,9 @@ Uart2.pbi: E:\AnyID\Git\FreeRtos_Stu\User\src\Uart2.c \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\iccarm_builtin.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\iar_intrinsics_common.h \
   E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/mpu_wrappers.h \
-  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc\task.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc\semphr.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/queue.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/task.h \
   E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/list.h \
-  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc\queue.h \
-  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/task.h
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc\task.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc\queue.h
