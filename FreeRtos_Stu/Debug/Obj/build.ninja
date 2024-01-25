@@ -56,16 +56,21 @@ build stream_buffer.pbi : index stream_buffer.xcl
 build tasks.pbi : index tasks.xcl
 build timers.pbi : index timers.xcl
 build mian.pbi : index mian.xcl
+build Anyid_CS1110_Reader.pbi : index Anyid_CS1110_Reader.xcl
+build Anyid_CS1110_Wight.pbi : index Anyid_CS1110_Wight.xcl
+build Anyid_CS1110_Wight_HL.pbi : index Anyid_CS1110_Wight_HL.xcl
+build AnyID_Stdlib.pbi : index AnyID_Stdlib.xcl
+build AnyID_Uart_Receive.pbi : index AnyID_Uart_Receive.xcl
 build SysCfg.pbi : index SysCfg.xcl
 build Uart2.pbi : index Uart2.xcl
 build Uart2_HL.pbi : index Uart2_HL.xcl
-build FreeRtos_Stu_part0.pbi : link system_gd32f30x.pbi gd32f30x_adc.pbi gd32f30x_bkp.pbi gd32f30x_can.pbi gd32f30x_crc.pbi gd32f30x_ctc.pbi
-build FreeRtos_Stu_part1.pbi : link gd32f30x_dac.pbi gd32f30x_dbg.pbi gd32f30x_dma.pbi gd32f30x_enet.pbi gd32f30x_exmc.pbi gd32f30x_exti.pbi
-build FreeRtos_Stu_part2.pbi : link gd32f30x_fmc.pbi gd32f30x_fwdgt.pbi gd32f30x_gpio.pbi gd32f30x_i2c.pbi gd32f30x_it.pbi gd32f30x_misc.pbi
-build FreeRtos_Stu_part3.pbi : link gd32f30x_pmu.pbi gd32f30x_rcu.pbi gd32f30x_rtc.pbi gd32f30x_sdio.pbi gd32f30x_spi.pbi gd32f30x_timer.pbi
-build FreeRtos_Stu_part4.pbi : link gd32f30x_usart.pbi gd32f30x_wwdgt.pbi port.pbi heap_4.pbi croutine.pbi event_groups.pbi
-build FreeRtos_Stu_part5.pbi : link list.pbi queue.pbi stream_buffer.pbi tasks.pbi timers.pbi mian.pbi
-build FreeRtos_Stu_part6.pbi : link SysCfg.pbi Uart2.pbi Uart2_HL.pbi
+build FreeRtos_Stu_part0.pbi : link system_gd32f30x.pbi gd32f30x_adc.pbi gd32f30x_bkp.pbi gd32f30x_can.pbi gd32f30x_crc.pbi gd32f30x_ctc.pbi gd32f30x_dac.pbi
+build FreeRtos_Stu_part1.pbi : link gd32f30x_dbg.pbi gd32f30x_dma.pbi gd32f30x_enet.pbi gd32f30x_exmc.pbi gd32f30x_exti.pbi gd32f30x_fmc.pbi gd32f30x_fwdgt.pbi
+build FreeRtos_Stu_part2.pbi : link gd32f30x_gpio.pbi gd32f30x_i2c.pbi gd32f30x_it.pbi gd32f30x_misc.pbi gd32f30x_pmu.pbi gd32f30x_rcu.pbi gd32f30x_rtc.pbi
+build FreeRtos_Stu_part3.pbi : link gd32f30x_sdio.pbi gd32f30x_spi.pbi gd32f30x_timer.pbi gd32f30x_usart.pbi gd32f30x_wwdgt.pbi port.pbi heap_4.pbi
+build FreeRtos_Stu_part4.pbi : link croutine.pbi event_groups.pbi list.pbi queue.pbi stream_buffer.pbi tasks.pbi timers.pbi
+build FreeRtos_Stu_part5.pbi : link mian.pbi Anyid_CS1110_Reader.pbi Anyid_CS1110_Wight.pbi Anyid_CS1110_Wight_HL.pbi AnyID_Stdlib.pbi AnyID_Uart_Receive.pbi SysCfg.pbi
+build FreeRtos_Stu_part6.pbi : link Uart2.pbi Uart2_HL.pbi
 build FreeRtos_Stu.pbd : link FreeRtos_Stu_part0.pbi FreeRtos_Stu_part1.pbi FreeRtos_Stu_part2.pbi FreeRtos_Stu_part3.pbi FreeRtos_Stu_part4.pbi FreeRtos_Stu_part5.pbi FreeRtos_Stu_part6.pbi
 build FreeRtos_Stu.pbw : browsedata FreeRtos_Stu.pbd
 

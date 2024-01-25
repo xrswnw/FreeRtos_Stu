@@ -373,6 +373,7 @@ void vPortExitCritical( void )
     }
 }
 /*-----------------------------------------------------------*/
+//系统中断函数
 
 void xPortSysTickHandler( void )
 {

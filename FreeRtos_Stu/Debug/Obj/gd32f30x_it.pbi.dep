@@ -38,4 +38,34 @@ gd32f30x_it.pbi: E:\AnyID\Git\FreeRtos_Stu\DeviceLib\src\gd32f30x_it.c \
   E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\DeviceLib\inc/gd32f30x_wwdgt.h \
   E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\DeviceLib\inc/gd32f30x_misc.h \
   E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\DeviceLib\inc/gd32f30x_enet.h \
-  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\DeviceLib\inc/gd32f30x_exmc.h
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\DeviceLib\inc/gd32f30x_exmc.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\User\inc\Uart2.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\User\inc/Uart2_HL.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\User\inc/Config.h \
+  E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc\AnyID_Type.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\string.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\ysizet.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\DLib_Product_string.h \
+  E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc\AnyID_Stdlib.h \
+  E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc/AnyID_Type.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stdio.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc\FreeRTOS.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stddef.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/FreeRTOSConfig.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/projdefs.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/portable.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/deprecated_definitions.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\portable\IAR\ARM_CM4F\portmacro.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\intrinsics.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\iccarm_builtin.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\iar_intrinsics_common.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/mpu_wrappers.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc\semphr.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/queue.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/task.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc/list.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc\task.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Kernel\inc\queue.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\User\inc/AnyID_Uart_Receive.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\User\inc\AnyID_CS1110_Wight.h \
+  E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\User\inc/AnyID_CS1110_Wight_HL.h

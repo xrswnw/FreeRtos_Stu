@@ -16,7 +16,7 @@
         <ShowSource>1</ShowSource>
     </Trace1>
     <DebugChecksum>
-        <Checksum>419788866</Checksum>
+        <Checksum>1987298174</Checksum>
     </DebugChecksum>
     <Disassembly>
         <InstrCount>0</InstrCount>
@@ -72,10 +72,15 @@
         <ITMlogFile>$PROJ_DIR$\ITM.log</ITMlogFile>
     </SWOTraceHWSettings>
     <struct_types>
-        <Fmt0>PORT_INF-pin	4	0</Fmt0>
-        <Fmt1>PORT_INF-port	4	0</Fmt1>
-        <Fmt2>QUENE_INFO-num	3	0</Fmt2>
+        <Fmt0>ListItem_t-xItemValue	4	0</Fmt0>
+        <Fmt1>PORT_INF-pin	4	0</Fmt1>
+        <Fmt2>PORT_INF-port	4	0</Fmt2>
+        <Fmt3>QUENE_INFO-num	3	0</Fmt3>
+        <Fmt4>struct xLIST_ITEM-xItemValue	4	0</Fmt4>
     </struct_types>
+    <array_types>
+        <Fmt0>u8[1280]	4	0</Fmt0>
+    </array_types>
     <Trace2>
         <Enabled>0</Enabled>
         <ShowSource>0</ShowSource>
@@ -134,8 +139,13 @@
         <mode>0</mode>
     </DisassembleMode>
     <Breakpoints2>
-        <Bp0>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Kernel\src\tasks.c}.807.13" 0 0 1 "" 0 "" 0</Bp0>
-        <Count>1</Count>
+        <Bp0>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Kernel\src\tasks.c}.807.13" 0 0 1 "" 0 "" 0</Bp0>
+        <Bp1>_ 0 "EMUL_CODE" "0x08002320" 0 0 1 "" 0 "" 0</Bp1>
+        <Bp2>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Kernel\inc\FreeRTOS.h}.956.1" 0 0 1 "" 0 "" 0</Bp2>
+        <Bp3>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Main\mian.c}.0.1" 0 0 1 "" 0 "" 0</Bp3>
+        <Bp4>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DeviceLib\src\gd32f30x_it.c}.0.1" 0 0 1 "" 0 "" 0</Bp4>
+        <Bp5>_ 0 "EMUL_CODE" "0x08005868" 0 0 1 "" 0 "" 0</Bp5>
+        <Count>6</Count>
     </Breakpoints2>
     <TermIOLog>
         <LoggingEnabled>_ 0</LoggingEnabled>

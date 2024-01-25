@@ -18,20 +18,24 @@ void Sys_Delayms(int n)
 void rcu_config(void)
 {
     rcu_periph_clock_enable(RCU_GPIOA);
+	
     rcu_periph_clock_enable(RCU_GPIOB);
+	
     rcu_periph_clock_enable(RCU_GPIOC);
+	
     rcu_periph_clock_enable(RCU_GPIOD);
-    /* enable ADC0 clock */
-    rcu_periph_clock_enable(RCU_UART3);
-    /* enable ADC1 clock */
+
+    rcu_periph_clock_enable(RCU_USART2);
+	
+	rcu_periph_clock_enable(RCU_USART1);
+	
     rcu_periph_clock_enable(RCU_ADC1);  
-    /* enable DMA0 clock */
-    //rcu_periph_clock_enable(RCU_DMA0);  
-    /* enable timer1 clock */
+
+    rcu_periph_clock_enable(RCU_DMA0);  
+
     rcu_periph_clock_enable(RCU_TIMER1);
-    /* config ADC clock */
+
 	rcu_periph_clock_enable( RCU_AF);
-    //rcu_adc_clock_config(RCU_CKADC_CKAPB2_DIV4);
 }
 
 
@@ -58,20 +62,32 @@ void Sys_CfgNVIC(void)
 */
 const PORT_INF SYS_RUN_LED = {GPIOB, GPIO_PIN_1};
 const PORT_INF IO_LED_CTL = {GPIOB, GPIO_PIN_3};
-
+const PORT_INF SYS_LED_RED   = {GPIOC, GPIO_PIN_0};
+const PORT_INF SYS_LED_BLUE  = {GPIOC, GPIO_PIN_1};
+const PORT_INF SYS_LED_GREEN = {GPIOC, GPIO_PIN_2};
 void Sys_CtrlIOInit(void)
 {
 	gpio_init(SYS_RUN_LED.port, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, SYS_RUN_LED.pin);
 	gpio_init(IO_LED_CTL.port, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, IO_LED_CTL.pin);
-
-
+	gpio_init(SYS_LED_RED.port, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, SYS_LED_RED.pin);
+	gpio_init(SYS_LED_BLUE.port, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, SYS_LED_BLUE.pin);
+	gpio_init(SYS_LED_GREEN.port, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, SYS_LED_GREEN.pin);
 }
+
+u32 g_nClock = 0;
 void Sys_Init(void)
 {
 	rcu_config();
 	Sys_CtrlIOInit();
-	Uart_Init(RS485_BAUD_RATE);
-	rcu_clock_freq_get(CK_SYS);
+	Uart_Init(USART_BAUD_RATE);
+	GPB_Init();
+	//systick_config();
+	g_nClock = rcu_clock_freq_get(CK_SYS);
+	g_nClock = rcu_clock_freq_get(CK_AHB);
+	g_nClock = rcu_clock_freq_get(CK_APB1);
+	g_nClock = rcu_clock_freq_get(CK_APB2);
+	
+	
 }
 
 const TickType_t xDelay500ms = pdMS_TO_TICKS( 500UL );
@@ -149,7 +165,7 @@ void SysLedTask2(void *pParaments)
 
 
 QueueHandle_t xQueue1;
-
+QueueHandle_t xQueue2;
 uint8_t i = 0;
 QUENE_INFO g_sTempQueneInfo = {0};
 
@@ -157,23 +173,24 @@ QUENE_INFO g_sTempQueneInfo = {0};
 TaskHandle_t sysQueneTaskHandel1 ;
 TaskHandle_t sysQueneTaskHandel2 ;
 
-
+UBaseType_t g_nQueneNum = 0;
 void SysWriteQueueTask(void *pParments)
 {
 	xLastWakeTime = xTaskGetTickCount();//获取当前时间
 	while(1)
 	{
 		g_sTempQueneInfo.num = uxQueueMessagesWaiting(xQueue1);		//获取队列当前长度
-		uint8_t j = 0;		
+		static uint8_t j = 0;		
 		for(uint8_t i = 0; i < ITEM_SIZE; i++)
 		{
 			g_sTempQueneInfo.buffer[i] = j++;
 		}
 		xQueueSendToBack(xQueue1, &g_sTempQueneInfo, xDelay50ms);
+		g_nQueneNum = uxQueueMessagesWaiting(xQueue1);
 		if(g_sTempQueneInfo.num < QUEUE_LENGTH)
 		{
-			Uart_SendBuf(&g_sTempQueneInfo.num, 1);
-			Uart_SendBuf(g_sTempQueneInfo.buffer, ITEM_SIZE);
+			Uart2_SendBuf(&g_sTempQueneInfo.num, 1);
+			Uart2_SendBuf(g_sTempQueneInfo.buffer, ITEM_SIZE);
 			vTaskSuspend(sysQueneTaskHandel2);
 			vTaskDelayUntil(&xLastWakeTime, xDelay500ms * 2);
 			
@@ -195,18 +212,18 @@ void SysWriteQueueTask(void *pParments)
 
 void SysReadQueueTask(void *pParments)
 {
-	UBaseType_t num = 0;
+
 	xLastWakeTime = xTaskGetTickCount();//获取当前时间
 	while(1)
 	{
-		num = uxQueueMessagesWaiting(xQueue1);
+		g_nQueneNum = uxQueueMessagesWaiting(xQueue1);
 		xQueueReceive(xQueue1, &g_sTempQueneInfo, xDelay50ms);
 		vTaskDelayUntil(&xLastWakeTime, xDelay500ms);
-		if(num > 0)
+		if(g_nQueneNum > 0)
 		{
-			Uart_SendBuf((uint8_t *)num, 1);
+			Uart2_SendBuf((uint8_t *)g_nQueneNum, 1);
 			vTaskSuspend(sysQueneTaskHandel1);
-			Uart_SendBuf(g_sTempQueneInfo.buffer, ITEM_SIZE);
+			Uart2_SendBuf(g_sTempQueneInfo.buffer, ITEM_SIZE);
 			vTaskDelayUntil(&xLastWakeTime, xDelay500ms * 2);
 		}
 		else
@@ -218,7 +235,7 @@ void SysReadQueueTask(void *pParments)
 			*/
 			
 			vTaskResume(sysQueneTaskHandel1);
-			vTaskSuspend(NULL);
+			vTaskSuspend(NULL);							//堵塞当前任务，暂停
 			//vTaskPrioritySet(sysQueneTaskHandel2, (uxTaskPriorityGet( sysQueneTaskHandel2 ) - 1));
 			//vTaskSuspend(NULL);			//suspend当前函数，后续代码不执行
 
@@ -238,4 +255,93 @@ void SysSemaphoreTask(void *pParments)
 
 
 
+}
+
+
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------------------//
+TaskHandle_t SysTaskUart2 ;
+void Sys_Uart2Task()
+{
+	for(;;)
+	{
+		if(Uart_IsRcvFrame(g_sUsartRcvFrame))
+		{
+			u16 crc1 = 0, crc2 = 0;
+			u16 txLen = 0;
+			memcpy(&g_sUsartRcvTempFrame, &g_sUsartRcvFrame, sizeof(USART_RCVFRAME));
+			memset(&g_sUsartRcvFrame, 0, sizeof(USART_RCVFRAME));
+			  
+			if((g_sUsartRcvTempFrame.length >= UART_FRAME_MIN_LEN) && (g_sUsartRcvTempFrame.length <= UART_BUFFER_MAX_LEN))
+			{
+				crc1 = Uart_GetFrameCrc(g_sUsartRcvTempFrame.buffer, g_sUsartRcvTempFrame.length);
+				crc2 = a_GetCrc(g_sUsartRcvTempFrame.buffer + UART_FRAME_POS_LEN, g_sUsartRcvTempFrame.length - 4);
+				if(crc1 == crc2)
+				{
+					txLen = Reader_ProcessUartFrames(g_sUsartRcvTempFrame.buffer, g_sUsartRcvTempFrame.length);
+					if(txLen)
+					{
+						Uart_EnableTx(g_sDeviceRspFrame.buffer, g_sDeviceRspFrame.len);
+						if(g_sDeviceRspFrame.cmd == READER_CMD_RESET)
+						{
+						
+						}
+					}
+				}
+			}
+			Uart_ResetFrame(&g_sUsartRcvTempFrame);
+		}
+	}
+}
+
+//系统级别中断任务，每5ms进入判断一次
+TaskHandle_t SysIsrTask;
+const TickType_t xDelay5ms = pdMS_TO_TICKS( 5UL );
+u32 g_nSysTick = 0;
+SYS_INFO g_sSysInfo = {0};
+void Sys_IsrTask()
+{
+	for(;;)
+	{
+		g_nSysTick ++;
+		Uart_IncIdleTime(30, g_sUartRcvFrame);
+		
+		if((g_nSysTick % 21) == 0)
+		{
+			//Uart2_SendByte((u8)g_nSysTick);
+			if(g_sSysInfo.ledState == 0)
+			{
+				g_sSysInfo.ledState |= 1;
+				Sys_LedRedOn();Sys_LedGreenOn();Sys_LedBlueOn();
+			}
+			else
+			{
+				g_sSysInfo.ledState &= ~1;
+				Sys_LedRedOff();Sys_LedGreenOff();Sys_LedBlueOff();
+			}
+		}
+		
+		vTaskDelay(xDelay5ms);
+	}
+
+}
+			 
+TaskHandle_t SysWightTask;
+
+u8 g_aGetWigValue[8] = {0xFF, 0x03, 0x00, 0x01, 0x00, 0x02, 0x80, 0x15};
+void Sys_WightTask()
+{
+	for(;;)
+	{
+		//Uart_EnableTx(g_aGetWigValue, 8);
+		vTaskDelay(pdMS_TO_TICKS( 50UL ));
+	}
 }

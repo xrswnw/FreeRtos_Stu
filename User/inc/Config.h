@@ -1,8 +1,8 @@
 #ifndef _ANYID_SM5001_CONFIG_
 #define _ANYID_SM5001_CONFIG_
 
-//#include "AnyID_Type.h"
-//#include "AnyID_Stdlib.h"
+#include "AnyID_Type.h"
+#include "AnyID_Stdlib.h"
 //#include "stm32f10x_conf.h"
 
 #include <stdio.h>

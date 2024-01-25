@@ -24,6 +24,12 @@ E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\Cmsis\GD\inc
 -I
 E:\AnyID\Git\FreeRtos_Stu\FreeRtos_Stu\..\User\inc
 -I
+E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup
+-I
+E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\inc
+-I
+E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc
+-I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\inc\c
@@ -41,6 +47,12 @@ E:\AnyID\Git\FreeRtos_Stu\DeviceLib\inc
 E:\AnyID\Git\FreeRtos_Stu\Cmsis\GD\inc
 -I
 E:\AnyID\Git\FreeRtos_Stu\User\inc
+-I
+E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup
+-I
+E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\inc
+-I
+E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff
 -D__CHAR_MIN__=0
@@ -334,6 +346,7 @@ E:\AnyID\Git\FreeRtos_Stu\User\inc
 -D__EDG_INT128_EXTENSIONS_ALLOWED=0
 -DGD32F30X_HD=1
 -D_ANYID_GD32_GDLIB=1
+-D_ANYID_STM32L4_=1
 -D_DLIB_CONFIG_FILE_HEADER_NAME="C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench 8.3\\arm\\inc\\c\\DLib_Config_Normal.h"
 -D_DLIB_CONFIG_FILE_STRING="C:\\Program Files (x86)\\IAR Systems\\Embedded Workbench 8.3\\arm\\inc\\c\\DLib_Config_Normal.h"
 -D__VERSION__="IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM"

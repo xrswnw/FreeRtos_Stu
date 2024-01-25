@@ -2513,6 +2513,21 @@
     <group>
         <name>User</name>
         <file>
+            <name>$PROJ_DIR$\..\User\src\Anyid_CS1110_Reader.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\User\src\Anyid_CS1110_Wight.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\User\src\Anyid_CS1110_Wight_HL.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\src\AnyID_Stdlib.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\User\src\AnyID_Uart_Receive.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\..\User\src\SysCfg.c</name>
         </file>
         <file>

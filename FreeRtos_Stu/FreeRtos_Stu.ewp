@@ -222,6 +222,7 @@
                     <name>CCDefines</name>
                     <state>GD32F30X_HD</state>
                     <state>_ANYID_GD32_GDLIB</state>
+                    <state>_ANYID_STM32L4_</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -353,6 +354,9 @@
                     <state>$PROJ_DIR$\..\DeviceLib\inc</state>
                     <state>$PROJ_DIR$\..\Cmsis\GD\inc</state>
                     <state>$PROJ_DIR$\..\User\inc</state>
+                    <state>E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\startup</state>
+                    <state>E:\AnyID\AnyID_Embedded\V1.1.0\STM32_lib_V3.3\inc</state>
+                    <state>E:\AnyID\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\inc</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -368,7 +372,7 @@
                 </option>
                 <option>
                     <name>CCOptLevel</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCOptStrategy</name>
@@ -377,7 +381,7 @@
                 </option>
                 <option>
                     <name>CCOptLevelSlave</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CompilerMisraRules98</name>
@@ -2264,6 +2268,21 @@
     </group>
     <group>
         <name>User</name>
+        <file>
+            <name>$PROJ_DIR$\..\User\src\Anyid_CS1110_Reader.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\User\src\Anyid_CS1110_Wight.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\User\src\Anyid_CS1110_Wight_HL.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\AnyID_Embedded\V1.1.0\AnyID_lib_V1.1.0\src\AnyID_Stdlib.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\User\src\AnyID_Uart_Receive.c</name>
+        </file>
         <file>
             <name>$PROJ_DIR$\..\User\src\SysCfg.c</name>
         </file>
