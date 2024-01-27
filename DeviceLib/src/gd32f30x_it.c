@@ -179,48 +179,37 @@ void USART_PORT_IQRNHANDLER()
 	}
 }
 
-void GPB_IRQHandler(void)
-{
-uint32_t recv_len=0;
-	if(usart_interrupt_flag_get(USART1,USART_INT_FLAG_IDLE) != RESET)
+
+
+void WIGHT_PORT_IQRNHANDLER(void)
+{	//接入电脑，数据收发正常，但接入传感器设备无数据反馈，会返回FF，暂不清楚原始，DMA收发？？？？？？？？？？？？？？？？？？？？？
+	if(RESET != usart_interrupt_flag_get(WIGHT_PORT, USART_INT_FLAG_IDLE))
 	{
-		usart_interrupt_flag_clear(USART1,USART_INT_FLAG_IDLE);
-		USART_STAT0(USART1);
-		USART_DATA(USART1);
-		dma_channel_disable(DMA0, DMA_CH5);
-		recv_len = sizeof(g_sGpbTempRcv.buffer) - dma_transfer_number_get(DMA0, DMA_CH5);
-		if(recv_len != 0 && recv_len < sizeof(g_sGpbTempRcv.buffer))
+		usart_data_receive(WIGHT_PORT);	
+		dma_channel_disable(WIGHT_DMA_CHANNEL, WIGHT_DMA_CHANNEL_RX);
+
+		g_sWightFrame.rxLen = WIGHT_BUFFER_MAX_LEN - dma_transfer_number_get(WIGHT_DMA_CHANNEL, WIGHT_DMA_CHANNEL_RX);
+		if(g_sWightFrame.rxLen == 1)
 		{
-			//memcpy(g_serial_recv_buf,data_buffer,g_recv_positin); ///* 转存数据到待处理数据缓冲区
-		
-			// 重新设置DMA传输 
-			dma_memory_address_config(DMA0, DMA_CH5,(uint32_t)g_sGpbTempRcv.buffer);
-			dma_transfer_number_config(DMA0, DMA_CH5,sizeof(g_sGpbTempRcv.buffer));
-			dma_flag_clear(DMA0, DMA_CH5, DMA_FLAG_FTF);
-			dma_channel_enable(DMA0, DMA_CH5);		///* 开启DMA传输 
+			u8 in = 0;
+			in ++;
 		}
-		else
-		{
-			memset(g_sGpbTempRcv.buffer,0,sizeof(g_sGpbTempRcv.buffer));
-		}
+		g_sWightFrame.state |= WIGHT_STAT_END;
+		dma_transfer_number_config(WIGHT_DMA_CHANNEL, WIGHT_DMA_CHANNEL_RX, WIGHT_BUFFER_MAX_LEN);
+		dma_channel_enable(WIGHT_DMA_CHANNEL, WIGHT_DMA_CHANNEL_RX);
 	}
-	return ;
 
 }
 
 
-void GPB_UART_DMA_TX_CHANNEL_IRQHAND(void)
+void DMA0_Channel6_IRQHandler(void)
 {
-    if(dma_interrupt_flag_get(GPB_UART_DMA_CHANNEL, GPB_UART_DMA_TX_CHANNEL, DMA_INT_FLAG_FTF))
-	{     
-        dma_interrupt_flag_clear(GPB_UART_DMA_CHANNEL, GPB_UART_DMA_TX_CHANNEL, DMA_INT_FLAG_G);
-    }
+	 if(dma_interrupt_flag_get(DMA0, DMA_CH6, DMA_INT_FLAG_FTF)!=RESET)
+	 {
+		dma_interrupt_flag_clear(DMA0, DMA_CH6, DMA_INT_FLAG_G);
+		Wight_Delayms(4);//必须加延时2-4ms，不加延时报文后面少两个字节，且最后一个字节永远是0xff
+		Wight_EnableRx();	 
+	 }
 }
 
-void GPB_UART_DMA_RX_CHANNEL_IRQHAND(void)
-{
-    if(dma_interrupt_flag_get(GPB_UART_DMA_CHANNEL, GPB_UART_DMA_TX_CHANNEL, DMA_INT_FLAG_FTF))
-	{     
-        dma_interrupt_flag_clear(GPB_UART_DMA_CHANNEL, GPB_UART_DMA_TX_CHANNEL, DMA_INT_FLAG_G);
-    }
-}
+

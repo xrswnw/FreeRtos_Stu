@@ -39,6 +39,7 @@ OF SUCH DAMAGE.
 #include "gd32f30x.h"
 #include "Uart2.h"
 #include "AnyID_CS1110_Wight.h"
+
 /* function declarations */
 /* this function handles NMI exception */
 void NMI_Handler(void);

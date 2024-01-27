@@ -133,6 +133,40 @@ typedef struct wihgtInfo{
 #define Gpb_OpDelay(t)		do{g_sGpbInfo.state = GPB_STAT_OP_DELAY; g_sGpbInfo.tick = t;}while(0)
 #define Gpb_ClearRcv()		do{memset(&g_sGpbInfo.rxBuf,0, sizeof(UART_RCVFRAME));}while(0)
 
+//-----------
+
+#define WIGHT_STAT_IDLE                  0x00
+#define WIGHT_STAT_DATA                  0x01
+#define WIGHT_STAT_TO                    0x02
+#define WIGHT_STAT_END                   0x03
+#define WIGHT_STAT_RCV                   0x04 	
+
+
+#define WIGHT_BUFFER_MAX_LEN			256
+typedef struct {
+	u8 cmd;
+	u8 state;
+	u16 readRegAddr;
+	u16	readRegNum;
+	u16 writeRegAddr;
+	u16	writeRegNum;
+	u8 txLen;
+	u8 rxLen;
+	u8 txBuffer[WIGHT_BUFFER_MAX_LEN];
+	u8 rxBuffer[WIGHT_BUFFER_MAX_LEN];
+}WITHT_FRAME;
+
+
+extern WITHT_FRAME	g_sWightFrame;
+
+
+
+
+
+void Wight_Init();
+
+
+//---------
 
 extern GPB_INFO g_sGpbInfo ;
 extern UART_RCVFRAME g_sGpbTempRcv;

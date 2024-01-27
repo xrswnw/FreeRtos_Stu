@@ -79,8 +79,8 @@ void Sys_Init(void)
 {
 	rcu_config();
 	Sys_CtrlIOInit();
-	Uart_Init(USART_BAUD_RATE);
-	GPB_Init();
+	Usart_Init(USART_BAUD_RATE);
+	Wight_Init();
 	//systick_config();
 	g_nClock = rcu_clock_freq_get(CK_SYS);
 	g_nClock = rcu_clock_freq_get(CK_AHB);
@@ -189,8 +189,8 @@ void SysWriteQueueTask(void *pParments)
 		g_nQueneNum = uxQueueMessagesWaiting(xQueue1);
 		if(g_sTempQueneInfo.num < QUEUE_LENGTH)
 		{
-			Uart2_SendBuf(&g_sTempQueneInfo.num, 1);
-			Uart2_SendBuf(g_sTempQueneInfo.buffer, ITEM_SIZE);
+			//Uart2_SendBuf(&g_sTempQueneInfo.num, 1);
+			//Uart2_SendBuf(g_sTempQueneInfo.buffer, ITEM_SIZE);
 			vTaskSuspend(sysQueneTaskHandel2);
 			vTaskDelayUntil(&xLastWakeTime, xDelay500ms * 2);
 			
@@ -221,9 +221,9 @@ void SysReadQueueTask(void *pParments)
 		vTaskDelayUntil(&xLastWakeTime, xDelay500ms);
 		if(g_nQueneNum > 0)
 		{
-			Uart2_SendBuf((uint8_t *)g_nQueneNum, 1);
+			//Uart2_SendBuf((uint8_t *)g_nQueneNum, 1);
 			vTaskSuspend(sysQueneTaskHandel1);
-			Uart2_SendBuf(g_sTempQueneInfo.buffer, ITEM_SIZE);
+			//Uart2_SendBuf(g_sTempQueneInfo.buffer, ITEM_SIZE);
 			vTaskDelayUntil(&xLastWakeTime, xDelay500ms * 2);
 		}
 		else
@@ -289,10 +289,11 @@ void Sys_Uart2Task()
 					txLen = Reader_ProcessUartFrames(g_sUsartRcvTempFrame.buffer, g_sUsartRcvTempFrame.length);
 					if(txLen)
 					{
-						Uart_EnableTx(g_sDeviceRspFrame.buffer, g_sDeviceRspFrame.len);
+						Usart_EnableTx(g_sDeviceRspFrame.buffer, g_sDeviceRspFrame.len);
 						if(g_sDeviceRspFrame.cmd == READER_CMD_RESET)
 						{
-						
+							vTaskDelay(pdMS_TO_TICKS( 5UL ));
+							Sys_SoftReset();
 						}
 					}
 				}
@@ -312,11 +313,12 @@ void Sys_IsrTask()
 	for(;;)
 	{
 		g_nSysTick ++;
-		Uart_IncIdleTime(30, g_sUartRcvFrame);
+		Uart_IncIdleTime(30, g_sUsartRcvFrame);
 		
 		if((g_nSysTick % 21) == 0)
 		{
 			//Uart2_SendByte((u8)g_nSysTick);
+			/*
 			if(g_sSysInfo.ledState == 0)
 			{
 				g_sSysInfo.ledState |= 1;
@@ -326,7 +328,7 @@ void Sys_IsrTask()
 			{
 				g_sSysInfo.ledState &= ~1;
 				Sys_LedRedOff();Sys_LedGreenOff();Sys_LedBlueOff();
-			}
+			}*/
 		}
 		
 		vTaskDelay(xDelay5ms);
@@ -341,7 +343,7 @@ void Sys_WightTask()
 {
 	for(;;)
 	{
-		//Uart_EnableTx(g_aGetWigValue, 8);
-		vTaskDelay(pdMS_TO_TICKS( 50UL ));
+		Wight_EnableDmaTx(g_aGetWigValue, 8 );
+		vTaskDelay(pdMS_TO_TICKS( 500UL ));
 	}
 }

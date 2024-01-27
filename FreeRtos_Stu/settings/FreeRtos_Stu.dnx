@@ -16,7 +16,7 @@
         <ShowSource>1</ShowSource>
     </Trace1>
     <DebugChecksum>
-        <Checksum>1987298174</Checksum>
+        <Checksum>2850754996</Checksum>
     </DebugChecksum>
     <Disassembly>
         <InstrCount>0</InstrCount>
@@ -145,7 +145,10 @@
         <Bp3>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Main\mian.c}.0.1" 0 0 1 "" 0 "" 0</Bp3>
         <Bp4>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DeviceLib\src\gd32f30x_it.c}.0.1" 0 0 1 "" 0 "" 0</Bp4>
         <Bp5>_ 0 "EMUL_CODE" "0x08005868" 0 0 1 "" 0 "" 0</Bp5>
-        <Count>6</Count>
+        <Bp6>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DeviceLib\src\gd32f30x_it.c}.0.1" 0 0 1 "" 0 "" 0</Bp6>
+        <Bp7>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\DeviceLib\src\gd32f30x_it.c}.191.3" 0 0 1 "" 0 "" 0</Bp7>
+        <Bp8>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\DeviceLib\src\gd32f30x_it.c}.186.2" 0 0 1 "" 0 "" 0</Bp8>
+        <Count>9</Count>
     </Breakpoints2>
     <TermIOLog>
         <LoggingEnabled>_ 0</LoggingEnabled>

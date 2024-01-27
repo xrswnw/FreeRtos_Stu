@@ -11,6 +11,7 @@ u16 Reader_ProcessUartFrames(u8 *pFrame, u16 len)
     u16 destAddr = 0;
     u16 paramsLen = 0;
     
+	memset(&g_sDeviceRspFrame, 0, sizeof(READER_RSPFRAME));
     destAddr = *((u16 *)(pFrame + UART_FRAME_POS_DESTADDR));
     if((destAddr != READER_FRAME_BROADCAST_ADDR) && (destAddr != /*g_sDeviceParamenter.addr*/ 0x01))
     {
@@ -54,6 +55,8 @@ u16 Reader_ProcessUartFrames(u8 *pFrame, u16 len)
 				g_sDeviceRspFrame.len = Device_ResponseFrame((u8 *)READER_VERSION, READER_VERSION_SIZE, &g_sDeviceRspFrame); 
 			}
 			break;
+        default:
+            break;
 	}
 		
      if(g_sDeviceRspFrame.len == 0 && (cmd != READER_CMD_CHG_IP))

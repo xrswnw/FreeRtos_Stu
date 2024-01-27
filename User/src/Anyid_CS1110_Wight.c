@@ -3,19 +3,27 @@
 GPB_INFO g_sGpbInfo ;
 UART_RCVFRAME g_sGpbTempRcv = {0};
 WIGHT_INFO g_sWightTempInfo = {0};
-void GPB_Init()
-{	
-    GPB_InitInterface(GPB_BAUDRARE);
-    Gpb_DmaTxInit(g_sGpbInfo.txBuf.buffer, g_sGpbInfo.txBuf.len);
-    Gpb_DmaRxInit(g_sGpbInfo.rxBuf.buffer, g_sGpbInfo.rxBuf.length);
 
+
+//
+WITHT_FRAME	g_sWightFrame = {0};
+void Wight_Init()
+{	
+	Wight_InitInterface(WIGHT_BAUD_RATE);
+	Wight_DmaTxInit();
+	Wight_DmaRxInit(g_sWightFrame.rxBuffer, WIGHT_BUFFER_MAX_LEN);
+
+	
+	
+	
+	//----
 	memset(&(g_sGpbInfo.rxBuf), 0, sizeof(UART_RCVFRAME));
     g_sGpbInfo.state = GPB_STAT_TX;
 	g_sGpbInfo.mode = GPB_WOEK_NORMAL;
-	
 
 }
 
+//
 u8 GPB_RFormatFrame(u8 cmd,u16 regAdd,u16 regNum,u8 *pFrame)
 {
     u8 pos = 0;
@@ -130,7 +138,7 @@ void GPB_TransmitCmd(GPB_TX_BUF *pBuffer)
     g_sGpbInfo.txBuf.regAdd = GPB_REG_ADDR_WGT;
     g_sGpbInfo.txBuf.regNum = 0x0002;
     g_sGpbInfo.txBuf.len = GPB_RFormatFrame(pBuffer->cmd, pBuffer->regAdd, pBuffer->regNum,  pBuffer->buffer);
-    GPB_WriteBuffer(g_sGpbInfo.txBuf.buffer, g_sGpbInfo.txBuf.len);
+    //GPB_WriteBuffer(g_sGpbInfo.txBuf.buffer, g_sGpbInfo.txBuf.len);
 }
 
 void GPB_Adjust(GPB_TX_BUF *pBuffer)
@@ -142,7 +150,7 @@ void GPB_Adjust(GPB_TX_BUF *pBuffer)
     pBuffer->data1 = 0x0001;
     g_sGpbInfo.txBuf.len = GPB_WFormatFrame(pBuffer->cmd, 4, pBuffer->regAdd, pBuffer->regNum, pBuffer->buffer, pBuffer->data0, pBuffer->data1);
     
-    GPB_WriteBuffer(g_sGpbInfo.txBuf.buffer, g_sGpbInfo.txBuf.len);
+    //GPB_WriteBuffer(g_sGpbInfo.txBuf.buffer, g_sGpbInfo.txBuf.len);
 
 }
 
@@ -153,7 +161,7 @@ void GPB_RtoChg(GPB_TX_BUF *pBuffer)
     pBuffer->regNum = 0x0002;
     g_sGpbInfo.txBuf.len = GPB_WFormatFrame(pBuffer->cmd, 4, pBuffer->regAdd, pBuffer->regNum, pBuffer->buffer, pBuffer->data0, pBuffer->data1);
     
-    GPB_WriteBuffer(g_sGpbInfo.txBuf.buffer, g_sGpbInfo.txBuf.len);
+   // GPB_WriteBuffer(g_sGpbInfo.txBuf.buffer, g_sGpbInfo.txBuf.len);
 
 }
 
@@ -179,7 +187,7 @@ void GPB_Filt_Chg()
     g_sGpbInfo.txBuf.buffer[pos++] = (crc >> 0) & 0xFF;
     g_sGpbInfo.txBuf.buffer[pos++] = (crc >> 8) & 0xFF;
     g_sGpbInfo.txBuf.len = pos;
-     GPB_WriteBuffer(g_sGpbInfo.txBuf.buffer, g_sGpbInfo.txBuf.len);
+     //GPB_WriteBuffer(g_sGpbInfo.txBuf.buffer, g_sGpbInfo.txBuf.len);
 
 }
 
@@ -248,7 +256,7 @@ void Gpb_TxFrame(u32 tick)
 		pGpbInfo->txBuf.len = GPB_WFormatFrame(pGpbInfo->txBuf.cmd, 4, pGpbInfo->txBuf.regAdd, pGpbInfo->txBuf.regNum, pGpbInfo->txBuf.buffer, pGpbInfo->txBuf.data0, pGpbInfo->txBuf.data1);
 	}
 
-	GPB_WriteBuffer(pGpbInfo->txBuf.buffer, pGpbInfo->txBuf.len);
+	//GPB_WriteBuffer(pGpbInfo->txBuf.buffer, pGpbInfo->txBuf.len);
 	pGpbInfo->tick = tick;
 }
 
