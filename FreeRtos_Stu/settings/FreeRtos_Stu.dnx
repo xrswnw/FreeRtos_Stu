@@ -16,7 +16,7 @@
         <ShowSource>1</ShowSource>
     </Trace1>
     <DebugChecksum>
-        <Checksum>2850754996</Checksum>
+        <Checksum>708331799</Checksum>
     </DebugChecksum>
     <Disassembly>
         <InstrCount>0</InstrCount>
@@ -135,21 +135,6 @@
         <ShowTimeSum>1</ShowTimeSum>
         <SumSortOrder>0</SumSortOrder>
     </EventLog>
-    <DisassembleMode>
-        <mode>0</mode>
-    </DisassembleMode>
-    <Breakpoints2>
-        <Bp0>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Kernel\src\tasks.c}.807.13" 0 0 1 "" 0 "" 0</Bp0>
-        <Bp1>_ 0 "EMUL_CODE" "0x08002320" 0 0 1 "" 0 "" 0</Bp1>
-        <Bp2>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Kernel\inc\FreeRTOS.h}.956.1" 0 0 1 "" 0 "" 0</Bp2>
-        <Bp3>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Main\mian.c}.0.1" 0 0 1 "" 0 "" 0</Bp3>
-        <Bp4>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DeviceLib\src\gd32f30x_it.c}.0.1" 0 0 1 "" 0 "" 0</Bp4>
-        <Bp5>_ 0 "EMUL_CODE" "0x08005868" 0 0 1 "" 0 "" 0</Bp5>
-        <Bp6>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DeviceLib\src\gd32f30x_it.c}.0.1" 0 0 1 "" 0 "" 0</Bp6>
-        <Bp7>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\DeviceLib\src\gd32f30x_it.c}.191.3" 0 0 1 "" 0 "" 0</Bp7>
-        <Bp8>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\DeviceLib\src\gd32f30x_it.c}.186.2" 0 0 1 "" 0 "" 0</Bp8>
-        <Count>9</Count>
-    </Breakpoints2>
     <TermIOLog>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -159,10 +144,6 @@
         <LogFile>_ ""</LogFile>
         <Category>_ 0</Category>
     </LogFile>
-    <Aliases>
-        <Count>0</Count>
-        <SuppressDialog>0</SuppressDialog>
-    </Aliases>
     <DriverProfiling>
         <Enabled>0</Enabled>
         <Mode>1</Mode>
@@ -180,4 +161,24 @@
         <Probe0>I0</Probe0>
         <ProbeSetup0>2 1 1 2 0 0</ProbeSetup0>
     </PowerProbe>
+    <DisassembleMode>
+        <mode>0</mode>
+    </DisassembleMode>
+    <Breakpoints2>
+        <Bp0>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Kernel\src\tasks.c}.807.13" 0 0 1 "" 0 "" 0</Bp0>
+        <Bp1>_ 0 "EMUL_CODE" "0x08002320" 0 0 1 "" 0 "" 0</Bp1>
+        <Bp2>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Kernel\inc\FreeRTOS.h}.956.1" 0 0 1 "" 0 "" 0</Bp2>
+        <Bp3>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Main\mian.c}.45.1" 0 0 1 "" 0 "" 0</Bp3>
+        <Bp4>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DeviceLib\src\gd32f30x_it.c}.212.1" 0 0 1 "" 0 "" 0</Bp4>
+        <Bp5>_ 0 "EMUL_CODE" "0x08005868" 0 0 1 "" 0 "" 0</Bp5>
+        <Bp6>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DeviceLib\src\gd32f30x_it.c}.212.1" 0 0 1 "" 0 "" 0</Bp6>
+        <Bp7>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Main\mian.c}.43.2" 0 0 1 "" 0 "" 0</Bp7>
+        <Bp8>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\User\src\SysCfg.c}.369.4" 0 0 1 "" 0 "" 0</Bp8>
+        <Bp9>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\User\src\Anyid_CS1110_Wight.c}.126.5" 0 0 1 "" 0 "" 0</Bp9>
+        <Count>10</Count>
+    </Breakpoints2>
+    <Aliases>
+        <Count>0</Count>
+        <SuppressDialog>0</SuppressDialog>
+    </Aliases>
 </settings>

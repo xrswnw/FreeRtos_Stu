@@ -171,7 +171,7 @@ void USART_PORT_IQRNHANDLER()
 		usart_data_receive(USART_PORT);	
 		dma_channel_disable(USART_DMA_CHANNEL, USART_DMA_CHANNEL_RX);
 
-		g_sUsartRcvFrame.length = UART_BUFFER_MAX_LEN - dma_transfer_number_get(USART_DMA_CHANNEL, USART_DMA_CHANNEL_RX);
+		g_sUsartRcvFrame.length = UART_BUFFER_MAX_LEN - dma_transfer_number_get(USART_DMA_CHANNEL, USART_DMA_CHANNEL_RX) - 1;
 		g_sUsartRcvFrame.state |= UART_STAT_END;
 		dma_transfer_number_config(USART_DMA_CHANNEL, USART_DMA_CHANNEL_RX, UART_BUFFER_MAX_LEN);
 
@@ -189,11 +189,6 @@ void WIGHT_PORT_IQRNHANDLER(void)
 		dma_channel_disable(WIGHT_DMA_CHANNEL, WIGHT_DMA_CHANNEL_RX);
 
 		g_sWightFrame.rxLen = WIGHT_BUFFER_MAX_LEN - dma_transfer_number_get(WIGHT_DMA_CHANNEL, WIGHT_DMA_CHANNEL_RX);
-		if(g_sWightFrame.rxLen == 1)
-		{
-			u8 in = 0;
-			in ++;
-		}
 		g_sWightFrame.state |= WIGHT_STAT_END;
 		dma_transfer_number_config(WIGHT_DMA_CHANNEL, WIGHT_DMA_CHANNEL_RX, WIGHT_BUFFER_MAX_LEN);
 		dma_channel_enable(WIGHT_DMA_CHANNEL, WIGHT_DMA_CHANNEL_RX);
@@ -207,7 +202,7 @@ void DMA0_Channel6_IRQHandler(void)
 	 if(dma_interrupt_flag_get(DMA0, DMA_CH6, DMA_INT_FLAG_FTF)!=RESET)
 	 {
 		dma_interrupt_flag_clear(DMA0, DMA_CH6, DMA_INT_FLAG_G);
-		Wight_Delayms(4);//必须加延时2-4ms，不加延时报文后面少两个字节，且最后一个字节永远是0xff
+		Wight_Delay100us(8);			//GD库函数发现，发送标志位清除后，数据并未及时发送完毕，综合考虑，清除标志位后延时0.5-1ms左右，不影响发送接收
 		Wight_EnableRx();	 
 	 }
 }

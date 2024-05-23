@@ -11,6 +11,12 @@ void Wight_Delayms(uint32_t n)             //系统延时n毫秒
     while(n--);
 }
 
+void Wight_Delay100us(u32 n)
+{
+    n *= 0x600; 
+    n++;
+    while(n--);
+}
 
 void Wight_InitInterface(u32 bud)
 {
@@ -27,16 +33,14 @@ void Wight_InitInterface(u32 bud)
     usart_hardware_flow_cts_config(USART1, USART_CTS_DISABLE);
     usart_receive_config(USART1, USART_RECEIVE_ENABLE);
     usart_transmit_config(USART1, USART_TRANSMIT_ENABLE);
- 	usart_enable(USART1);
-	
+ 	
 	usart_dma_receive_config(USART1, USART_RECEIVE_DMA_ENABLE);
 	usart_dma_transmit_config(USART1, USART_TRANSMIT_DMA_ENABLE);
 	
 	nvic_priority_group_set(NVIC_PRIGROUP_PRE3_SUB1);
 	nvic_irq_enable(USART1_IRQn, 1, 0);
 	usart_interrupt_enable(USART1, USART_INT_IDLE);
-	usart_interrupt_enable(USART1, USART_INT_RBNE);
-
+	usart_enable(USART1);
 }
 
 void Wight_DmaTxInit()
@@ -104,9 +108,7 @@ void Wight_EnableDmaTx(u8 *pBuffer, u16 lenth)
 	dma_flag_clear(DMA0, DMA_CH6, DMA_FLAG_FTF);
 	dma_memory_address_config(DMA0, DMA_CH6, (uint32_t)pBuffer);
 	dma_transfer_number_config(DMA0, DMA_CH6, lenth);
-	dma_channel_enable(DMA0, DMA_CH6);
-	//while (usart_flag_get(USART1, USART_FLAG_TC)!=RESET);
-	//Wight_EnableRx();
+	dma_channel_enable(DMA0, DMA_CH6);						//进中断打开接收
 }
 
 

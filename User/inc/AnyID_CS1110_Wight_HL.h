@@ -23,7 +23,7 @@ extern const PORT_INF USART1_CTRL;
 
                                             
 
-void Wight_Delayms(uint32_t n); 
+void Wight_Delayms(uint32_t n); void Wight_Delay100us(u32 n);
 void Wight_InitInterface(u32 bud);
 void Wight_DmaTxInit();
 void Wight_DmaRxInit(u8 *pFrame, u16 len);

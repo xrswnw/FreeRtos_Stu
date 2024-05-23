@@ -12,15 +12,123 @@ void Wight_Init()
 	Wight_InitInterface(WIGHT_BAUD_RATE);
 	Wight_DmaTxInit();
 	Wight_DmaRxInit(g_sWightFrame.rxBuffer, WIGHT_BUFFER_MAX_LEN);
+	g_sWightFrame.state |= WIGHT_STAT_TX;
+	//建立信号量二进制
+	/*
+	g_sWightFrame.rcvBrySre = xSemaphoreCreateBinary();
+	
+	if(xSemaphoreCreateBinary == NULL)
+	{
+		//建立失败
+		while(1)
+		{
+			////////////////
+		}
+	}*/
+	
+}
 
-	
-	
-	
-	//----
-	memset(&(g_sGpbInfo.rxBuf), 0, sizeof(UART_RCVFRAME));
-    g_sGpbInfo.state = GPB_STAT_TX;
-	g_sGpbInfo.mode = GPB_WOEK_NORMAL;
 
+#define POLYNOMIAL                      0xA001   //x^16 + x^12 + x^5 + 1
+#define PRESET_VALUE                    0xFFFF
+u16 Wight_GetCrc16(u8 *pBuffer, u8 len)
+{
+    u16 i = 0;
+    u16 crc = 0;
+    u8 j = 0;
+
+    crc = PRESET_VALUE;
+    for(i = 0; i < len; i++)
+    {
+        crc = crc ^ pBuffer[i];
+        for(j = 0; j < 8; j++)
+        {
+            if(crc & 0x0001)
+            {
+                crc = (crc >> 1) ^ POLYNOMIAL;
+            }
+            else
+            {
+                crc = (crc >> 1);
+            }
+        }
+    }
+
+    return crc;
+}
+
+u16 Wight_FormatFrame(WITHT_FRAME *pFrame)
+{
+	u16 pos = 0, crc16 = 0;
+	
+	pFrame->txBuffer[pos ++] = WIGHT_MODBUS_BROAD_ADDR;
+	pFrame->txBuffer[pos ++] = pFrame->cmd;
+	pFrame->txBuffer[pos ++] = (pFrame->regAddr >> 8) & 0xFF;
+	pFrame->txBuffer[pos ++] = (pFrame->regAddr >> 0) & 0xFF;
+	pFrame->txBuffer[pos ++] = (pFrame->regNum >> 8) & 0xFF;
+	pFrame->txBuffer[pos ++] = (pFrame->regNum >> 0) & 0xFF;
+	
+	if(pFrame->cmd == WIGHT_MODBUS_FUN_READ_HOLDREGS)
+	{
+		memcpy(pFrame->txBuffer + pos, pFrame->frame, pFrame->regNum);
+		pos += (pFrame->regNum * WIGHT_MODBUS_REG_BUYE_LEN);
+	}
+	else
+	{
+	
+	}
+	crc16 = Wight_GetCrc16(pFrame->txBuffer, pos);
+	pFrame->txBuffer[pos ++] = (crc16 >> 0) & 0xFF;
+    pFrame->txBuffer[pos ++] = (crc16 >> 8) & 0xFF;
+	
+	return pos;
+}
+
+void Wight_Transion(WITHT_FRAME *pFrame)
+{
+	if(pFrame->mode == WIGHT_WOEK_NORMAL)
+	{
+		pFrame->cmd = WIGHT_MODBUS_FUN_READ_HOLDREGS;
+		pFrame->regAddr = WIGHT_MODBUSADDRREG_WGT;
+		pFrame->regNum = WIGHT_MODBUS_REG_BUYE_LEN * 2;
+	}
+	else if(pFrame->mode ==  WIGHT_WORK_SET_ZERO)
+	{	
+		pFrame->cmd = WIGHT_MODBUS_FUN_WRITE_HOLDREGS;
+		pFrame->regAddr = WIGHT_MODBUSADDRREG_WGT;
+		pFrame->regNum = 0x0002;
+		pFrame->frame[0] = 0x0000;
+		pFrame->frame[1] = 0x0001;
+	}
+	else if(pFrame->mode == WIGHT_WORK_QP)
+	{
+
+	}
+	
+	pFrame->txLen = Wight_FormatFrame(pFrame);
+	Wight_EnableDmaTx(pFrame->txBuffer, pFrame->txLen);
+	//pFrame->tick = g_n
+
+}
+
+BOOL Wight_ChkRcvFrame(WITHT_FRAME *pFrame)
+{
+	BOOL bOk = FALSE;
+	u16 crc1 = 0, crc2 = 0;
+	if(pFrame->rxLen >= WIGHT_FRAME_MIN_LENTH)
+	{
+		//if(pFrame->cmd == pFrame->rxBuffer[WIGHT_FRAME_POS_CMD])
+		{
+			crc1 = Wight_GetCrc(pFrame->rxBuffer, pFrame->rxLen);
+			crc2 = Wight_GetCrc16(pFrame->rxBuffer, pFrame->rxLen - 2);
+			if(crc1 == crc2)
+			{
+				bOk = TRUE;
+			}
+		}
+	}
+	
+	return bOk;
 }
 
 //
@@ -291,4 +399,7 @@ void Gpb_RcvSlove()
 		pGpbInfo->mode = GPB_WOEK_NORMAL;	
 	}
 }
+
+
+
 

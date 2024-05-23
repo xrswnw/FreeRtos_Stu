@@ -81,6 +81,7 @@ void Sys_Init(void)
 	Sys_CtrlIOInit();
 	Usart_Init(USART_BAUD_RATE);
 	Wight_Init();
+	
 	//systick_config();
 	g_nClock = rcu_clock_freq_get(CK_SYS);
 	g_nClock = rcu_clock_freq_get(CK_AHB);
@@ -140,9 +141,6 @@ void SysLedTask2(void *pParaments)
 	static uint8_t i = 1;
 	uxPriority = uxTaskPriorityGet( NULL );
 
-
-	
-	
 	xLastWakeTime = xTaskGetTickCount();//获取当前时间
 	for(;;)
 	{
@@ -173,6 +171,8 @@ QUENE_INFO g_sTempQueneInfo = {0};
 TaskHandle_t sysQueneTaskHandel1 ;
 TaskHandle_t sysQueneTaskHandel2 ;
 
+TaskHandle_t sysQueneWriteTask;
+TaskHandle_t sysQueneReadTask;
 UBaseType_t g_nQueneNum = 0;
 void SysWriteQueueTask(void *pParments)
 {
@@ -180,12 +180,13 @@ void SysWriteQueueTask(void *pParments)
 	while(1)
 	{
 		g_sTempQueneInfo.num = uxQueueMessagesWaiting(xQueue1);		//获取队列当前长度
+		
 		static uint8_t j = 0;		
 		for(uint8_t i = 0; i < ITEM_SIZE; i++)
 		{
 			g_sTempQueneInfo.buffer[i] = j++;
 		}
-		xQueueSendToBack(xQueue1, &g_sTempQueneInfo, xDelay50ms);
+		xQueueSendToBack(xQueue1, &g_sTempQueneInfo, xDelay50ms);					//先像队列写入数据，写满后再读出，测试队列量
 		g_nQueneNum = uxQueueMessagesWaiting(xQueue1);
 		if(g_sTempQueneInfo.num < QUEUE_LENGTH)
 		{
@@ -212,13 +213,13 @@ void SysWriteQueueTask(void *pParments)
 
 void SysReadQueueTask(void *pParments)
 {
-
 	xLastWakeTime = xTaskGetTickCount();//获取当前时间
 	while(1)
 	{
 		g_nQueneNum = uxQueueMessagesWaiting(xQueue1);
 		xQueueReceive(xQueue1, &g_sTempQueneInfo, xDelay50ms);
 		vTaskDelayUntil(&xLastWakeTime, xDelay500ms);
+
 		if(g_nQueneNum > 0)
 		{
 			//Uart2_SendBuf((uint8_t *)g_nQueneNum, 1);
@@ -241,7 +242,6 @@ void SysReadQueueTask(void *pParments)
 
 		}
 	}
-
 }
 
 
@@ -335,7 +335,18 @@ void Sys_IsrTask()
 	}
 
 }
-			 
+	
+
+/*
+#define WIGHT_STAT_IDLE					0x00
+#define WIGHT_STAT_DATA					0x01
+#define WIGHT_STAT_TO					0x02
+#define WIGHT_STAT_END					0x04
+#define WIGHT_STAT_RCV					0x08
+#define WIGHT_STAT_TX					0x10
+#define WIGHT_STAT_WAIT					0x20
+#define WIGHT_STAT_STEP					0x40
+*/
 TaskHandle_t SysWightTask;
 
 u8 g_aGetWigValue[8] = {0xFF, 0x03, 0x00, 0x01, 0x00, 0x02, 0x80, 0x15};
@@ -343,7 +354,20 @@ void Sys_WightTask()
 {
 	for(;;)
 	{
-		Wight_EnableDmaTx(g_aGetWigValue, 8 );
-		vTaskDelay(pdMS_TO_TICKS( 500UL ));
+		if(Wight_ChkRcv(&g_sWightFrame))
+		{
+			if(Wight_ChkRcvFrame(&g_sWightFrame))
+			{
+				vTaskDelay(pdMS_TO_TICKS( 500UL ));
+				Wight_ResetFrame(&g_sWightFrame);
+				g_sWightFrame.state |= WIGHT_STAT_TX;
+			}
+		}
+		
+		if(g_sWightFrame.state & WIGHT_STAT_TX)
+		{
+			Wight_EnableDmaTx(g_aGetWigValue, 8 );
+			g_sWightFrame.state &= ~WIGHT_STAT_TX;
+		}
 	}
 }

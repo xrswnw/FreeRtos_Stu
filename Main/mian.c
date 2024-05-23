@@ -30,7 +30,7 @@ int main()
 	
 
 
-
+	
 	//าตฮ๑
 	xTaskCreate(Sys_Uart2Task, "SysTaskUart2", configTIMER_TASK_STACK_DEPTH, NULL, 0, &SysTaskUart2);
 	xTaskCreate(Sys_IsrTask, "SysIsrTask", configTIMER_TASK_STACK_DEPTH, NULL, 0, &SysIsrTask);

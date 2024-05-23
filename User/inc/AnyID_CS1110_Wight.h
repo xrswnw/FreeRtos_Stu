@@ -134,38 +134,61 @@ typedef struct wihgtInfo{
 #define Gpb_ClearRcv()		do{memset(&g_sGpbInfo.rxBuf,0, sizeof(UART_RCVFRAME));}while(0)
 
 //-----------
+#define WIGHT_MODBUS_BROAD_ADDR			 0xFF
 
-#define WIGHT_STAT_IDLE                  0x00
-#define WIGHT_STAT_DATA                  0x01
-#define WIGHT_STAT_TO                    0x02
-#define WIGHT_STAT_END                   0x03
-#define WIGHT_STAT_RCV                   0x04 	
+#define WIGHT_STAT_IDLE					0x00
+#define WIGHT_STAT_DATA					0x01
+#define WIGHT_STAT_TO					0x02
+#define WIGHT_STAT_END					0x04
+#define WIGHT_STAT_RCV					0x08
+#define WIGHT_STAT_TX					0x10
+#define WIGHT_STAT_WAIT					0x20
+#define WIGHT_STAT_STEP					0x40
+
+#define WIGHT_WOEK_NORMAL				0x00
+#define WIGHT_WORK_SET_ZERO				0x01
+#define WIGHT_WORK_QP				0x01
 
 
-#define WIGHT_BUFFER_MAX_LEN			256
+#define WIGHT_MODBUS_FUN_READ_HOLDREGS	0x03
+#define WIGHT_MODBUS_FUN_WRITE_HOLDREGS	0x10
+
+#define WIGHT_MODBUS_REG_BUYE_LEN			2
+
+#define WIGHT_MODBUSADDRREG_WGT			0x0001
+
+#define WIGHT_FRAME_POS_CMD				0x01
+#define WIGHT_FRAME_MIN_LENTH			0x04
+
+#define WIGHT_BUFFER_MAX_LEN				256
+#define WIGHT_MODBUS_REG_NUM				32
 typedef struct {
+	u8 addr;
 	u8 cmd;
+	u8 mode;
 	u8 state;
-	u16 readRegAddr;
-	u16	readRegNum;
-	u16 writeRegAddr;
-	u16	writeRegNum;
+	u16 regAddr;
+	u16	regNum;
 	u8 txLen;
 	u8 rxLen;
+	u8 repat;
 	u8 txBuffer[WIGHT_BUFFER_MAX_LEN];
 	u8 rxBuffer[WIGHT_BUFFER_MAX_LEN];
+	u16 frame[WIGHT_MODBUS_REG_NUM];
+	u32 tick;
+	SemaphoreHandle_t rcvBrySre;
 }WITHT_FRAME;
 
-
+#define Wight_GetCrc(p, len)						(*((u16 *)(p + len - 2)))
 extern WITHT_FRAME	g_sWightFrame;
 
 
-
-
+#define Wight_ChkRcv(p)			(((p)->state) & WIGHT_STAT_END)
+#define Wight_ResetFrame(rcvFrame)           do{(rcvFrame)->state = WIGHT_STAT_IDLE; (rcvFrame)->rxLen = 0; (rcvFrame)->repat = 0;}while(0)
 
 void Wight_Init();
-
-
+u16 Wight_GetCrc16(u8 *pBuffer, u8 len);
+u16 Wight_FormatFrame(WITHT_FRAME *pFrame);
 //---------
 
 extern GPB_INFO g_sGpbInfo ;
@@ -187,5 +210,5 @@ u16 GPB_GetCrc16(u8 *pBuffer, u8 len);
 
 
 void Witgh_CalAvg(WIGHT_INFO *pInfo, u32 value);
-
+BOOL Wight_ChkRcvFrame(WITHT_FRAME *pFrame);
 #endif

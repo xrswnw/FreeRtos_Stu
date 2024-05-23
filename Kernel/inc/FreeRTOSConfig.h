@@ -59,12 +59,12 @@ errata. */
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION	1
 #define configUSE_IDLE_HOOK						0									//空闲任务狗子
 #define configUSE_TICK_HOOK						0
-#define configCPU_CLOCK_HZ						( SystemCoreClock )
-#define configTICK_RATE_HZ						( ( TickType_t ) 1000 )
+#define configCPU_CLOCK_HZ						( SystemCoreClock )					//对应MCU主频
+#define configTICK_RATE_HZ						( ( TickType_t ) 1000 )				//系统运行时基，可相应修改，调整运行速度
 #define configMAX_PRIORITIES					( 5 )
 #define configMINIMAL_STACK_SIZE				( ( unsigned short ) 256 )			//栈空间
 #define configTOTAL_HEAP_SIZE					( ( size_t ) ( 30 * 1024 ) )		//堆空间
-#define configMAX_TASK_NAME_LEN					( 10 )
+#define configMAX_TASK_NAME_LEN					( 10 )								//
 #define configUSE_TRACE_FACILITY				1
 #define configUSE_16_BIT_TICKS					0
 #define configUSE_MUTEXES						1
